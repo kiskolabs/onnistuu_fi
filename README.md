@@ -81,3 +81,6 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/kiskolabs/onnistuu_fi.
 
+## License
+
+The library is released under the MIT License.
