@@ -20,7 +20,7 @@ Or install it yourself as:
 
 ## Dependencies
 
-Mcrypt needs to be installed for the library to work.
+None.
 
 ## Usage
 

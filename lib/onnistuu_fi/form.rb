@@ -23,6 +23,7 @@ module OnnistuuFi
       "<form action='#{API_ENDPOINT}' method='post'>
         #{fields.compact.join("\n")}
         <input type='hidden' name='padding' value='pkcs5' />
+        <input type='hidden' name='cipher' value='rijndael-128' />
         #{@options[:button]}
       </form>"
     end

@@ -1,31 +1,36 @@
-require "mcrypt"
 require "base64"
 require "openssl"
 
 module OnnistuuFi
   class Signer
-    def initialize(client_identifier, encryption_key)
-      @client_identifier = client_identifier
-      @encryption_key = Base64.decode64(encryption_key)
+    attr_accessor :key
+
+    def initialize(_key, keycode)
+      self.key = Base64.decode64(keycode)
     end
 
-    # Returns [base64_iv, base64_encrypted_data]
-    def encrypt(data)
-      iv = OpenSSL::Cipher::Cipher.new("AES-256-CBC").random_iv.unpack("H*").first
-      mcrypt = Mcrypt.new(:rijndael_256, :cbc, @encryption_key, iv, :pkcs)
+    def encrypt(message)
+      return nil if message.nil?
 
-      [Base64.encode64(iv), Base64.encode64(mcrypt.encrypt(JSON.dump(data)))]
+      iv = OpenSSL::Cipher::Cipher.new("AES-128-CBC").random_iv
+      aes = OpenSSL::Cipher.new('AES-256-CBC')
+      aes.encrypt
+      aes.key = key
+      aes.iv = iv
+      encrypted_data = aes.update(JSON.dump(message)) + aes.final
+      [Base64.encode64(iv), Base64.encode64(encrypted_data)]
     end
 
-    # Parameters:
-    # - encrypted data in base64
-    # - iv in base64
-    #
-    # Returns decrypted data
-    def decrypt(encrypted, iv)
-      mcrypt = Mcrypt.new(:rijndael_256, :cbc, @encryption_key, Base64.decode64(iv), :pkcs)
-
-      JSON.load(mcrypt.decrypt(Base64.decode64(encrypted)))
+    def decrypt(encrypted_data, iv)
+      return nil if encrypted_data.nil?
+      encrypted_data = Base64.decode64(encrypted_data).strip
+      iv = Base64.decode64(iv).strip
+      aes = OpenSSL::Cipher.new('AES-256-CBC')
+      aes.decrypt
+      aes.key = key
+      aes.iv = iv
+      message = (aes.update(encrypted_data) + aes.final)
+      JSON.load(message)
     end
   end
 end
