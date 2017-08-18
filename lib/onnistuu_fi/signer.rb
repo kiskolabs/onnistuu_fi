@@ -23,8 +23,8 @@ module OnnistuuFi
 
     def decrypt(encrypted_data, iv)
       return nil if encrypted_data.nil?
-      encrypted_data = Base64.decode64(encrypted_data).strip
-      iv = Base64.decode64(iv).strip
+      encrypted_data = Base64.decode64(encrypted_data)
+      iv = Base64.decode64(iv)
       aes = OpenSSL::Cipher.new('AES-256-CBC')
       aes.decrypt
       aes.key = key
