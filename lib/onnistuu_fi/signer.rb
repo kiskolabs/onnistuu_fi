@@ -12,7 +12,7 @@ module OnnistuuFi
     def encrypt(message)
       return nil if message.nil?
 
-      iv = OpenSSL::Cipher::Cipher.new("AES-128-CBC").random_iv
+      iv = OpenSSL::Cipher.new("AES-128-CBC").random_iv
       aes = OpenSSL::Cipher.new('AES-256-CBC')
       aes.encrypt
       aes.key = key
