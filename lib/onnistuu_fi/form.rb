@@ -8,9 +8,9 @@ module OnnistuuFi
 
       data = {
         stamp: @options.delete(:stamp) || Time.now,
-        return_success: @options.delete(:return_success),
-        document: @options.delete(:document),
-        requirements: @options.delete(:requirements)
+        return_success: @options.delete(:return_success) || raise(ArgumentError, "missing required parameter: return_success"),
+        document: @options.delete(:document) || raise(ArgumentError, "missing required parameter: document"),
+        requirements: @options.delete(:requirements) || raise(ArgumentError, "missing required parameter: requirements")
       }
       iv, signed_data = signer.encrypt(data)
 
@@ -31,7 +31,11 @@ module OnnistuuFi
     private
 
     def validate_options!
-      # TODO
+      [:customer, :return_failure, :data, :iv].map do |field_name|
+        unless options[field_name]
+          raise ArgumentError, "missing required parameter: #{field_name}"
+        end
+      end
     end
 
     def fields

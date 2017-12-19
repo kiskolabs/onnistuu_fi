@@ -16,6 +16,38 @@ describe OnnistuuFi::Form do
   }
   let(:form) { OnnistuuFi::Form.new(signer, form_options) }
 
+  describe "parameter validation " do
+    before do
+      allow(signer).to receive(:encrypt).and_return(["IV", "ENCRYPTED_DATA"])
+    end
+
+    context "when no parameters are passed" do
+      let(:form_options) {
+        {}
+      }
+
+      it "raises an error" do
+        expect { form }.to raise_error(ArgumentError, "missing required parameter: return_success")
+      end
+    end
+
+    context "when encrypted parameters are passed, but still parameters missing" do
+      let(:form_options) {
+        {
+          return_success: "http://example.com/success",
+          document: "http://example.com/document",
+          requirements: [
+            {"type" => "person", "identifier" => "110761-635Y"}
+          ]
+        }
+      }
+
+      it "raises an error" do
+        expect { form }.to raise_error(ArgumentError, "missing required parameter: customer")
+      end
+    end
+  end
+
   describe "#generate_html" do
     before do
       allow(signer).to receive(:encrypt).and_return(["IV", "ENCRYPTED_DATA"])
