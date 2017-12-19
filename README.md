@@ -2,6 +2,10 @@
 
 This gem implements Onnistuu.fi API version 0.20.
 
+[![Build Status](https://travis-ci.org/kiskolabs/onnistuu_fi.svg?branch=master)](https://travis-ci.org/kiskolabs/onnistuu_fi)
+[![Maintainability](https://api.codeclimate.com/v1/badges/8d070e1360173eac0e69/maintainability)](https://codeclimate.com/github/kiskolabs/onnistuu_fi/maintainability)
+
+
 ## Installation
 
 Add this line to your application's Gemfile:
